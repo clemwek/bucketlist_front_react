@@ -12,6 +12,7 @@ import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
 import Bucketlist from './components/Bucketlist';
+import AddBucketlist from './components/AddBucketlist';
 import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(
@@ -22,6 +23,7 @@ ReactDOM.render(
             <Route exact path="/login" component={Login}/>
             <Route exact path="/register" component={Register}/>
             <Route exact path="/bucketlist" component={Bucketlist}/>
+            <Route exact path="/addBucketlist" component={AddBucketlist}/>
             {/* <Route path="/topics" component={Topics}/> */}
         </div>
     </MuiThemeProvider>
