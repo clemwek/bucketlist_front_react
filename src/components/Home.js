@@ -4,21 +4,33 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 import RaisedButton from 'material-ui/RaisedButton';
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
-      value: 3,
+      style: {
+        root: {
+          margin: 'auto',
+          width: '80%',
+          height: 'auto',
+          textAlign: 'center',
+        },
+        imgHeader: {
+          height: '50%',
+          width: '100%'
+        }
+      },
     };
   }
   render() {
     return (
       <div className="Home" >
-        <Navbar></Navbar>
-        <Card>
+        <Navbar />
+        <Card style={this.state.style.root} >
           <CardMedia
+            style={this.state.style.imgHeader}
             overlay={<CardTitle title="Road to achieving your goals" subtitle="Get started right now" />}
           >
-            <img src="assets/img/random-road.jpg" alt="" />
+            <img styleName="max-height: 400px" src="assets/img/random-road.jpg" alt="" />
           </CardMedia>
           <CardTitle title="Bucketlist App" />
           <CardText>
