@@ -5,11 +5,22 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Navbar from './Navbar';
 
 class Login extends Component {
+  constructor() {
+    super();
+    this.state = {
+      style: {
+        margin: 'auto',
+        width: '50%',
+        height: 'auto',
+        textAlign: 'center',
+      }
+    }
+  }
   render() {
     return (
       <div className="Login" >
           <Navbar/>
-          <Card>
+          <Card style={this.state.style}>
             <CardHeader
             title="Login here"
             />
