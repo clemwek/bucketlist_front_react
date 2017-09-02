@@ -32,7 +32,7 @@ class AddItem extends Component {
 
       let strDate = this.state.date.toString()
       let newDate = new Date(strDate)
-      let formatedDate = newDate.getDate() + '/' + (newDate.getMonth()+1) + '/' + newDate.getFullYear()
+      let formatedDate = (newDate.getMonth()+1) + '/' + newDate.getDate() + '/' + newDate.getFullYear()
       axios.post('http://127.0.0.1:5000/bucketlists/'+this.props.match.params.bucketId+'/items', 
       {
         name: this.state.itemName,

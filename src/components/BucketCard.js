@@ -81,7 +81,20 @@ class BucketCard extends Component {
               <RaisedButton label="Add Item" />
             </Link>
               <RaisedButton label="Edit" primary={true}/>
-              <RaisedButton label="Delete" secondary={true}/>
+              <RaisedButton label="Delete" secondary={true} onClick={(e) => {
+                  axios.delete('http://127.0.0.1:5000/bucketlists/'+this.props.bucket.id, {
+                      headers: {
+                        'Authorization': localStorage.getItem('token'),
+                        'Content-Type': 'application/json'
+                      }
+                  }).then(resp => {
+                      if (resp.status === 200) {
+                          this.setState({items: resp.data.items})
+                      }
+                  }).catch((error) => {
+                      console.log(error)
+                  })
+                }}/>
             </CardActions>
             <CardText>
               <div>
