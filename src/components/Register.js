@@ -4,6 +4,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Navbar from './Navbar';
 import { Redirect } from 'react-router-dom';
+import Snackbar from 'material-ui/Snackbar';
 
 const axios = require('axios');
 
@@ -15,34 +16,45 @@ class Login extends Component {
           email: '',
           password: '',
           passwordAgain: '',
+          error: '',
+          open: false,
           login_success: false
         }
 
-        // handleChange = (event) => {
-        //     this.setState({id: event.target.value});
-        //  }
+      }
 
-        this.register = (e) => {
-            e.preventDefault()
-            if (this.state.password === this.state.passwordAgain) {
-                axios.post('http://127.0.0.1:5000/auth/register', {
-                    username: this.state.userName,
-                    email: this.state.email,
-                    password: this.state.password
-                }).then(resp => {
-                    if (resp.status === 201) {
-                        console.log(resp.data)
-                        this.setState({login_success: true})
-                        localStorage.setItem('username', resp.data['username']);
-                        localStorage.setItem('token', resp.data['token']);
-                    }
-                }).catch((error) => {
-                    console.log(error)
-                })
-            }
-            
+      register = (e) => {
+        e.preventDefault()
+          if (this.state.password === this.state.passwordAgain) {
+            axios.post('http://127.0.0.1:5000/auth/register', {
+                username: this.state.userName,
+                email: this.state.email,
+                password: this.state.password
+            }).then(resp => {
+                if (resp.status === 201) {
+                    this.setState({login_success: true})
+                    localStorage.setItem('username', resp.data['username']);
+                    localStorage.setItem('token', resp.data['token']);
+                }
+            }).catch((error) => {
+                this.setState({error: error.response.data.error})
+                this.setState({open: true})
+                console.log(error)
+            })
         }
       }
+
+    handleTouchTap = () => {
+        this.setState({
+        open: true,
+        });
+    };
+
+    handleRequestClose = () => {
+        this.setState({
+        open: false,
+        });
+    };
 
   render() {
     const style = {
@@ -104,6 +116,12 @@ class Login extends Component {
                     <br />
                     <RaisedButton type="submit" label="Register" primary={true} />
                 </form>
+                <Snackbar
+                    open={this.state.open}
+                    message={this.state.error}
+                    autoHideDuration={4000}
+                    onRequestClose={this.handleRequestClose}
+                />
             </CardText>
         </Card>
       </div>

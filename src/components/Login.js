@@ -4,36 +4,48 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Navbar from './Navbar';
 import { Redirect } from 'react-router-dom';
+import Snackbar from 'material-ui/Snackbar';
 
 const axios = require('axios')
 
 class Login extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       username: '',
       password: '',
+      error: '',
+      open: false,
       login_success: false
     }
-    this.login = (e) => {
-      e.preventDefault()
-      axios.post('http://127.0.0.1:5000/auth/login', {
-        username: this.state.username,
-        password: this.state.password
-      }).then(resp => {
-        if (resp.status === 202) {
-          this.setState({login_success: true})
-          localStorage.setItem('username', resp.data['username']);
-          localStorage.setItem('token', resp.data['token']);
-          console.log(resp.data)
-        } else {
-          console.log(resp.data)
-        }
-      }).catch((error) => {
-        console.log(error)
-      })
-    }
   }
+  login = (e) => {
+    e.preventDefault()
+    axios.post('http://127.0.0.1:5000/auth/login', {
+      username: this.state.username,
+      password: this.state.password
+    }).then(resp => {
+        this.setState({login_success: true})
+        localStorage.setItem('username', resp.data['username']);
+        localStorage.setItem('token', resp.data['token']);
+    }).catch((error) => {
+      this.setState({error: error.response.data.error})
+      this.setState({open: true})
+      console.log(error)
+    })
+  }
+
+  handleTouchTap = () => {
+    this.setState({
+      open: true,
+    });
+  };
+
+  handleRequestClose = () => {
+    this.setState({
+      open: false,
+    });
+  };
 
   render() {
     const style = {
@@ -76,6 +88,12 @@ class Login extends Component {
               <p>forgot your password?</p>
               </CardText>
             </form>
+            <Snackbar
+              open={this.state.open}
+              message={this.state.error}
+              autoHideDuration={4000}
+              onRequestClose={this.handleRequestClose}
+            />
         </Card>
       </div>
     );
