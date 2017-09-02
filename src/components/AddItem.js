@@ -4,6 +4,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import DatePicker from 'material-ui/DatePicker';
 import Navbar from './Navbar';
+import { Redirect } from 'react-router-dom';
 
 const axios = require('axios');
 
@@ -28,28 +29,37 @@ class AddItem extends Component {
 
     this.AddItem = (e) => {
       e.preventDefault()
-      // axios.post('http://127.0.0.1:5000//items', {
-      //   username: this.state.userName,
-      //   email: this.state.email,
-      //   password: this.state.password
-      // }).then(resp => {
-      //     if (resp.status === 201) {
-      //         console.log(resp.data)
-      //         this.setState({login_success: true})
-      //         localStorage.setItem('username', resp.data['username']);
-      //         localStorage.setItem('token', resp.data['token']);
-      //     }
-      // }).catch((error) => {
-      //     console.log(error)
-      // })
+
       let strDate = this.state.date.toString()
       let newDate = new Date(strDate)
       let formatedDate = newDate.getDate() + '/' + (newDate.getMonth()+1) + '/' + newDate.getFullYear()
+      axios.post('http://127.0.0.1:5000/bucketlists/'+this.props.match.params.bucketId+'/items', 
+      {
+        name: this.state.itemName,
+        description: this.state.description,
+        date: formatedDate
+      }, {
+        headers: {
+          'Authorization': localStorage.getItem('token'),
+          'Content-Type': 'application/json'
+        }}
+    ).then(resp => {
+          if (resp.status === 201) {
+              console.log(resp.data)
+              this.setState({redirect: true})
+          }
+      }).catch((error) => {
+          console.log(error)
+      })
       console.log(formatedDate)
+      console.log()
 
     }
   }
   render() {
+    if (this.state.redirect) {
+        return <Redirect to='/bucketlist' />
+    }
     return (
       <div className="AddItem" >
           <Navbar/>
