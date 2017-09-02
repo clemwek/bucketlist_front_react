@@ -15,71 +15,60 @@ import FontIcon from 'material-ui/FontIcon';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import Navbar from './Navbar';
+import BucketCard from './BucketCard';
+import { Link } from 'react-router-dom';
+
+const axios = require('axios');
 
 class Bucketlist extends Component {
   constructor() {
     super();
     this.state = {
-      style: {
-        root: {
-          margin: 'auto',
-          width: '90%',
-          height: 'auto',
-          textAlign: 'center',
-        },
-        card: {
-          margin: '10px',
-          width: '350px',
-          height: 'auto'
-        },
-        imgHeader: {
-          height: '50%',
-          width: '100%'
-        },
-        addBucket: {
-          right: 20,
-          bottom: 20,
-          position: 'fixed'
-        }
-      },
+      bucketlists: []
     };
   }
+
+  componentWillMount() {
+    axios.get('http://127.0.0.1:5000/bucketlists', {
+        headers: {
+          'Authorization': localStorage.getItem('token'),
+          'Content-Type': 'application/json'
+        }
+    }).then(resp => {
+        if (resp.status === 200) {
+            this.setState({bucketlists: resp.data.bucketlist})
+        }
+    }).catch((error) => {
+        console.log(error)
+        console.log('test we aregetting here!')
+    })
+  }
   render() {
+    const style = {
+      addBucket: {
+        right: 20,
+        bottom: 20,
+        position: 'fixed'
+      }
+    }
+    let bucketlist;
+    if (this.state.bucketlists) {
+      bucketlist = this.state.bucketlists.map(bucket => {
+        // console.log(bucket)
+        return (
+          <BucketCard key={bucket.id} bucket={bucket}/>
+        );
+      });
+    }
     return (
       <div className="Bucketlist" >
           <Navbar/>
-          <div style={this.state.style.root} className="bucket-wrap">
-            <Card style={this.state.style.card}>
-            <CardHeader
-              title="This is a bucket"
-            />
-            <CardActions>
-              <RaisedButton label="Add Item" />
-              <RaisedButton label="Edit" primary={true}/>
-              <RaisedButton label="Delete" secondary={true}/>
-            </CardActions>
-            <CardText>
-              <div>
-                <list>
-                  <ListItem
-                    leftAvatar={<Avatar icon={<ActionAssignment />} backgroundColor={blue500} />}
-                    rightIcon={
-                    <div>
-                      <FontIcon className="material-icons" >edit</FontIcon>
-                      <FontIcon className="material-icons" color={red500}>delete</FontIcon>
-                    </div>
-                    }
-                    primaryText="Vacation itinerary"
-                    secondaryText="Jan 20, 2014"
-                    />
-                  </list>
-                </div>
-              </CardText>
-          </Card>
-        </div>
-        <FloatingActionButton style={this.state.style.addBucket}>
+          {bucketlist}
+        <Link to={'/addBucketlist'}>
+        <FloatingActionButton style={style.addBucket}>
           <ContentAdd />
         </FloatingActionButton>
+        </Link>
       </div>
     );
   }
