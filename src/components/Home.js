@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -37,8 +38,12 @@ class Home extends Component {
           What would you like to do in the next few years? Climb a mountain? Learn to ride a bike? :) It’s important to keep track of what you have already done and what you are yet to achieve. Register and start tracking..
           </CardText>
           <CardActions>
-            <RaisedButton label="Register" primary={true} />
-            <RaisedButton label="Login" secondary={true} />
+            <Link to={`/register`} >
+              <RaisedButton label="Register" primary={true} />
+            </Link>
+            <Link to={`/login`} >
+              <RaisedButton label="Login" secondary={true} />
+            </Link>
           </CardActions>
         </Card>
       </div>
