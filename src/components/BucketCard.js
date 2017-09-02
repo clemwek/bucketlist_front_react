@@ -30,7 +30,6 @@ class BucketCard extends Component {
   }
 
   componentWillMount() {
-    console.log()
     axios.get('http://127.0.0.1:5000/bucketlists/'+this.props.bucket.id+'/items', {
         headers: {
           'Authorization': localStorage.getItem('token'),
@@ -65,9 +64,8 @@ class BucketCard extends Component {
     let item_list;
     if (this.state.items) {
       item_list = this.state.items.map(item => {
-        console.log(" this place works")
         return (
-          <ItemList key={item.id} bucket={item}/>
+          <ItemList key={item.id} item={item} bucketId={this.props.bucket.id}/>
         );
       });
     }
@@ -79,7 +77,7 @@ class BucketCard extends Component {
               title={this.props.bucket.name}
             />
             <CardActions>
-            <Link to={'/addItem'}>
+            <Link to={'/addItem/'+this.props.bucket.id}>
               <RaisedButton label="Add Item" />
             </Link>
               <RaisedButton label="Edit" primary={true}/>
