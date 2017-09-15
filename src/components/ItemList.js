@@ -26,6 +26,11 @@ class ItemList extends Component {
       items: []
     };
   }
+
+  deleteItem = () => {
+    this.props.deleteItem(this.props.bucketId, this.props.item.id)
+  }
+
   render() {
     const style = {
         root: {
@@ -51,20 +56,7 @@ class ItemList extends Component {
             rightIcon={
             <div>
                 <FontIcon className="material-icons" >edit</FontIcon>
-                <FontIcon className="material-icons" color={red500} onClick={(e) => {
-                  axios.delete('http://127.0.0.1:5000/bucketlists/'+this.props.bucketId+'/items/'+this.props.item.id, {
-                      headers: {
-                        'Authorization': localStorage.getItem('token'),
-                        'Content-Type': 'application/json'
-                      }
-                  }).then(resp => {
-                      if (resp.status === 200) {
-                          this.setState({items: resp.data.items})
-                      }
-                  }).catch((error) => {
-                      console.log(error)
-                  })
-                }}>delete</FontIcon>
+                <FontIcon className="material-icons" color={red500} onClick={this.deleteItem}>delete</FontIcon>
             </div>
             }
             primaryText={this.props.item.name}

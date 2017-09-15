@@ -28,6 +28,23 @@ class Bucketlist extends Component {
     };
   }
 
+  deleteBucket = (id) => {
+    axios.delete('http://127.0.0.1:5000/bucketlists/'+ id, {
+        headers: {
+          'Authorization': localStorage.getItem('token'),
+          'Content-Type': 'application/json'
+        }
+    }).then(resp => {
+        if (resp.status === 200) {
+            const bucketlists = this.state.bucketlists;
+            const filteredList = bucketlists.filter((item)=> item.id !== id)
+            this.setState({bucketlists: filteredList})
+        }
+    }).catch((error) => {
+        console.log(error)
+    })
+  }
+
   componentWillMount() {
     axios.get('http://127.0.0.1:5000/bucketlists', {
         headers: {
@@ -56,7 +73,7 @@ class Bucketlist extends Component {
       bucketlist = this.state.bucketlists.map(bucket => {
         // console.log(bucket)
         return (
-          <BucketCard key={bucket.id} bucket={bucket}/>
+          <BucketCard key={bucket.id} bucket={bucket} deleteBucket={this.deleteBucket}/>
         );
       });
     }

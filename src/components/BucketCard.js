@@ -28,6 +28,22 @@ class BucketCard extends Component {
       items: []
     };
   }
+  deleteItem = (bucketId, id) => {
+    axios.delete('http://127.0.0.1:5000/bucketlists/'+bucketId+'/items/'+id, {
+        headers: {
+          'Authorization': localStorage.getItem('token'),
+          'Content-Type': 'application/json'
+        }
+    }).then(resp => {
+        if (resp.status === 200) {
+          const items = this.state.items;
+          const filteredItems = items.filter((item) => item.id !== id)
+          this.setState({items: filteredItems})
+        }
+    }).catch((error) => {
+        console.log(error)
+    })
+  }
 
   componentWillMount() {
     axios.get('http://127.0.0.1:5000/bucketlists/'+this.props.bucket.id+'/items', {
@@ -43,36 +59,44 @@ class BucketCard extends Component {
         console.log(error)
     })
   }
+
+  deleteBucket = () => {
+    this.props.deleteBucket(this.props.bucket.id);
+  }
+
   render() {
     const style = {
-        root: {
-            margin: 'auto',
-            width: '90%',
-            height: 'auto',
-            textAlign: 'center',
-          },
-          card: {
-            margin: '10px',
-            width: '350px',
-            height: 'auto'
-          },
-          imgHeader: {
-            height: '50%',
-            width: '100%'
-          }
+      root: {
+        margin: 'auto',
+        width: '90%',
+        height: 'auto',
+        textAlign: 'center',
+      },
+      card: {
+        margin: '10px',
+        width: '350px',
+        height: 'auto'
+      },
+      imgHeader: {
+        height: '50%',
+        width: '100%'
+      }
     }
     let item_list;
     if (this.state.items) {
       item_list = this.state.items.map(item => {
         return (
-          <ItemList key={item.id} item={item} bucketId={this.props.bucket.id}/>
+          <ItemList key={item.id} item={item} deleteItem={this.deleteItem} bucketId={this.props.bucket.id}/>
         );
       });
     }
+    console.log(this.props);
+    
+    
     return (
       <div className="BucketCard" >
-          <div style={style.root} className="bucket-wrap">
-            <Card style={style.card}>
+        <div style={style.root} className="bucket-wrap">
+          <Card style={style.card}>
             <CardHeader
               title={this.props.bucket.name}
             />
@@ -81,26 +105,13 @@ class BucketCard extends Component {
               <RaisedButton label="Add Item" />
             </Link>
               <RaisedButton label="Edit" primary={true}/>
-              <RaisedButton label="Delete" secondary={true} onClick={(e) => {
-                  axios.delete('http://127.0.0.1:5000/bucketlists/'+this.props.bucket.id, {
-                      headers: {
-                        'Authorization': localStorage.getItem('token'),
-                        'Content-Type': 'application/json'
-                      }
-                  }).then(resp => {
-                      if (resp.status === 200) {
-                          this.setState({items: resp.data.items})
-                      }
-                  }).catch((error) => {
-                      console.log(error)
-                  })
-                }}/>
+              <RaisedButton label="Delete" secondary={true} onClick={this.deleteBucket} />
             </CardActions>
             <CardText>
               <div>
                 {item_list}
-                </div>
-              </CardText>
+              </div>
+            </CardText>
           </Card>
         </div>
       </div>
