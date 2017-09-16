@@ -13,6 +13,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Bucketlist from './components/Bucketlist';
 import AddBucketlist from './components/AddBucketlist';
+import EditBucket from './components/EditBucketlist';
 import AddItem from './components/AddItem';
 import registerServiceWorker from './registerServiceWorker';
 
@@ -26,6 +27,8 @@ ReactDOM.render(
             <Route exact path="/bucketlist" component={Bucketlist}/>
             <Route exact path="/addBucketlist" component={AddBucketlist}/>
             <Route exact path="/addItem/:bucketId" component={AddItem}/>
+            <Route exact path="/editBucket/:bucketId" component={EditBucket}/>
+            {/* <Route exact path="/editItem/:bucketId/items/:itemId" component={EditItem}/> */}
             {/* <Route path="/topics" component={Topics}/> */}
         </div>
     </MuiThemeProvider>

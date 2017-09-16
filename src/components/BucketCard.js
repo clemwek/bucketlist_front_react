@@ -90,9 +90,7 @@ class BucketCard extends Component {
         );
       });
     }
-    console.log(this.props);
-    
-    
+
     return (
       <div className="BucketCard" >
         <div style={style.root} className="bucket-wrap">
@@ -104,7 +102,9 @@ class BucketCard extends Component {
             <Link to={'/addItem/'+this.props.bucket.id}>
               <RaisedButton label="Add Item" />
             </Link>
+            <Link to={'/editBucket/'+this.props.bucket.id}>
               <RaisedButton label="Edit" primary={true}/>
+            </Link>
               <RaisedButton label="Delete" secondary={true} onClick={this.deleteBucket} />
             </CardActions>
             <CardText>
