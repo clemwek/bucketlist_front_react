@@ -55,7 +55,9 @@ class ItemList extends Component {
             leftAvatar={<Avatar icon={<ActionAssignment />} backgroundColor={blue500} />}
             rightIcon={
             <div>
+              <Link to={"/editItem/"+this.props.bucketId+"/items/"+this.props.item.id}>
                 <FontIcon className="material-icons" >edit</FontIcon>
+              </Link>
                 <FontIcon className="material-icons" color={red500} onClick={this.deleteItem}>delete</FontIcon>
             </div>
             }
