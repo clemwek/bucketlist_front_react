@@ -19,13 +19,13 @@ class Login extends Component {
       login_success: false,
     }
   }
-  login = (e) => {
-    e.preventDefault()
+
+  login = (event) => {
+    event.preventDefault()
     axios.post('http://127.0.0.1:5000/auth/login', {
       username: this.state.username,
       password: this.state.password
     }).then(resp => {
-        console.log('response', resp);
         localStorage.setItem('username', resp.data['username']);
         localStorage.setItem('token', resp.data['token']);
     })
@@ -35,6 +35,12 @@ class Login extends Component {
       this.setState({open: true})
       console.log(error)
     })
+  }
+
+  handleChange = (event) => {
+    const value = event.target.value
+    const name = event.target.name
+    this.setState({[name]: value})
   }
 
   handleTouchTap = () => {
@@ -64,46 +70,44 @@ class Login extends Component {
     }
     else if(this.state.login_success === false) {
       login = (
-        <div className="Login" >
-        <Navbar/>
-        <Card style={style}>
-          <CardHeader
-          title="Login here"
-          />
-          <form onSubmit={this.login.bind(this)}>
-            <CardText>
-            <TextField
+          <div className="Login" >
+          <Navbar/>
+          <Card style={style}>
+            <CardHeader
+            title="Login here"
+            />
+            <form onSubmit={this.login}>
+              <CardText>
+              <TextField
+                name="username"
                 hintText="Username"
                 floatingLabelText="Username"
-                onChange={(e) => {
-                  this.setState({username: e.target.value})
-                }}
-            />
-            <br />
-                <br />
-            <TextField
+                onChange={this.handleChange}
+              />
+              <br />
+                  <br />
+              <TextField
+                name="password"
                 hintText="Password"
                 floatingLabelText="Password"
                 type="password"
-                onChange={(e) => {
-                  this.setState({password: e.target.value})
-                }}
+                onChange={this.handleChange}
+              />
+              <br />
+              <br />
+              <RaisedButton type="submit" label="Login" primary={true} />
+              <br />
+              <p>forgot your password?</p>
+              </CardText>
+            </form>
+            <Snackbar
+              open={this.state.open}
+              message={this.state.error}
+              autoHideDuration={4000}
+              onRequestClose={this.handleRequestClose}
             />
-            <br />
-            <br />
-            <RaisedButton type="submit" label="Login" primary={true} />
-            <br />
-            <p>forgot your password?</p>
-            </CardText>
-          </form>
-          <Snackbar
-            open={this.state.open}
-            message={this.state.error}
-            autoHideDuration={4000}
-            onRequestClose={this.handleRequestClose}
-          />
-      </Card>
-    </div>
+        </Card>
+      </div>
       );
     }
     return (
