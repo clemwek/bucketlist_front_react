@@ -20,10 +20,9 @@ class Login extends Component {
           open: false,
           login_success: false
         }
+    }
 
-      }
-
-      register = (e) => {
+    register = (e) => {
         e.preventDefault()
           if (this.state.password === this.state.passwordAgain) {
             axios.post('http://127.0.0.1:5000/auth/register', {
@@ -42,7 +41,13 @@ class Login extends Component {
                 console.log(error)
             })
         }
-      }
+    }
+
+    handleChange = (event) => {
+        const value = event.target.value
+        const name = event.target.name
+        this.setState({[name]: value})
+    }
 
     handleTouchTap = () => {
         this.setState({
@@ -74,43 +79,34 @@ class Login extends Component {
             title="Register here"
             />
             <CardText>
-                <form onSubmit={this.register.bind(this)}>
+                <form onSubmit={this.register}>
                     <TextField
-                        ref="userName"
+                        name="userName"
                         hintText="Username"
                         floatingLabelText="Username"
-                        onChange={(e) => {
-                            this.setState({userName: e.target.value})
-                        }}
+                        onChange={this.handleChange}
                     /><br />
                         <br />
                     <TextField
-                        ref="email"
+                        name="email"
                         hintText="Email"
                         floatingLabelText="Email"
-                        onChange={(e) => {
-                            this.setState({email: e.target.value})
-                        }}
+                        onChange={this.handleChange}
                     /><br />
                         <br />
                     <TextField
-                        ref="password"
+                        name="password"
                         hintText="Password"
                         floatingLabelText="Password"
                         type="password"
-                        onChange={(e) => {
-                            this.setState({password: e.target.value})
-                        }}
+                        onChange={this.handleChange}
                     /><br />
                     <br />
                     <TextField
-                        ref="passwordAgain"
+                        name="passwordAgain"
                         hintText="password again"
                         floatingLabelText="password again"
-                        value={this.state.passwordAgain}
-                        onChange={(e) => {
-                            this.setState({passwordAgain: e.target.value})
-                        }}
+                        onChange={this.handleChange}
                         type="password"
                     /><br />
                     <br />
@@ -119,7 +115,7 @@ class Login extends Component {
                 <Snackbar
                     open={this.state.open}
                     message={this.state.error}
-                    autoHideDuration={4000}
+                    autoHideDuration={5000}
                     onRequestClose={this.handleRequestClose}
                 />
             </CardText>
