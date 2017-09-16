@@ -85,7 +85,7 @@ class EditBucket extends Component {
           <Navbar/>
           <Card style={this.state.style}>
             <CardHeader
-            title="Add A Bucketlist"
+            title="Edit A Bucketlist"
             />
             <form onSubmit={this.editBucketlist}>
               <CardText>

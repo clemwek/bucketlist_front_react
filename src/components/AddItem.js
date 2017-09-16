@@ -3,6 +3,7 @@ import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import DatePicker from 'material-ui/DatePicker';
+import Snackbar from 'material-ui/Snackbar';
 import Navbar from './Navbar';
 import { Redirect } from 'react-router-dom';
 
@@ -45,17 +46,36 @@ class AddItem extends Component {
         }}
     ).then(resp => {
           if (resp.status === 201) {
-              console.log(resp.data)
               this.setState({redirect: true})
           }
       }).catch((error) => {
-          console.log(error)
+        this.setState({error: error.response.data.error})
+        this.setState({open: true})
       })
       console.log(formatedDate)
       console.log()
 
     }
   }
+
+  handleTouchTap = () => {
+    this.setState({
+      open: true,
+    });
+  };
+
+  handleRequestClose = () => {
+    this.setState({
+      open: false,
+    });
+  };
+
+  handleChange = (event) => {
+    const value = event.target.value
+    const name = event.target.name
+    this.setState({[name]: value})
+  }
+
   render() {
     if (this.state.redirect) {
         return <Redirect to='/bucketlist' />
@@ -70,32 +90,35 @@ class AddItem extends Component {
             <form onSubmit={this.AddItem.bind(this)}>
               <CardText>
                 <TextField
-                    hintText="Item name"
-                    floatingLabelText="Item name"
-                    onChange={(e) => {
-                        this.setState({itemName: e.target.value})
-                    }}
+                  name="itemName"
+                  hintText="Item name"
+                  floatingLabelText="Item name"
+                  onChange={this.handleChange}
                 /><br />
                 <br />
                 <TextField
-                    hintText="Item description"
-                    floatingLabelText="Item description"
-                    onChange={(e) => {
-                        this.setState({description: e.target.value})
-                    }}
+                  name="description"
+                  hintText="Item description"
+                  floatingLabelText="Item description"
+                  onChange={this.handleChange}
                 /><br />
                 <br />
-                  <DatePicker hintText="Choose A date" container="inline"
+                <DatePicker hintText="Choose A date" container="inline"
                   onChange={(e, date) => {
-                    console.log(date)
-                        this.setState({date: date})
-                    }}
-                  /><br />
+                    this.setState({date: date})
+                  }}
+                /><br />
                 <br />
                 <RaisedButton type="submit" label="Add Bucket" primary={true} />
               </CardText>
             </form>
         </Card>
+        <Snackbar
+          open={this.state.open}
+          message={this.state.error}
+          autoHideDuration={5000}
+          onRequestClose={this.handleRequestClose}
+        />
       </div>
     );
   }
